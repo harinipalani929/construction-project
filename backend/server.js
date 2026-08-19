@@ -11,21 +11,27 @@ app.use(express.json());
 
 // MySQL connection
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "construction_db"
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "root",
+    database: process.env.DB_NAME || "construction_db"
 });
 
-// Connect to MySQL
-db.connect((err) => {
-    if (err) {
-        console.log("MySQL connection failed:", err.message);
-        return;
-    }
+// Connect to MySQL with retry
+function connectDatabase() {
+    db.connect((err) => {
+        if (err) {
+            console.log("MySQL not ready. Retrying in 5 seconds...");
+            setTimeout(connectDatabase, 5000);
+            return;
+        }
 
-    console.log("MySQL database connected successfully!");
-});
+        console.log("MySQL database connected successfully!");
+    });
+}
+
+connectDatabase();
+
 
 // Home route
 app.get("/", (req, res) => {
