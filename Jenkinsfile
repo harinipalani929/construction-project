@@ -3,16 +3,10 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Source code checked out from GitHub'
-            }
-        }
-
         stage('Build') {
             steps {
                 dir('backend') {
-                    bat 'npm install'
+                    sh 'npm install'
                 }
             }
         }
@@ -20,31 +14,25 @@ pipeline {
         stage('Test') {
             steps {
                 dir('backend') {
-                    bat 'npm test'
+                    sh 'npm test'
                 }
             }
         }
 
-        stage('Docker Build') {
+        stage('Pipeline Complete') {
             steps {
-                bat 'docker compose build'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                bat 'docker compose up -d'
+                echo 'Build and testing stages completed successfully!'
             }
         }
     }
 
     post {
         success {
-            echo 'CI/CD Pipeline completed successfully!'
+            echo 'CI Pipeline completed successfully!'
         }
 
         failure {
-            echo 'CI/CD Pipeline failed!'
+            echo 'CI Pipeline failed!'
         }
     }
 }
