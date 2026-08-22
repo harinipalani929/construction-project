@@ -16,7 +16,6 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME || "construction_db"
 });
 
-// Connect to MySQL with retry
 function connectDatabase() {
     db.connect((err) => {
         if (err) {
