@@ -13,6 +13,14 @@ services:
     depends_on:
       - mysql
 
+  frontend:
+    build: ./frontend
+    container_name: construction_frontend
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+
   mysql:
     image: mysql:8.0
     container_name: construction_mysql
