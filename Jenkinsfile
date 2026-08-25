@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -19,20 +20,27 @@ pipeline {
             }
         }
 
+        stage('Deploy to Docker') {
+            steps {
+                sh 'docker compose up -d --build'
+            }
+        }
+
         stage('Pipeline Complete') {
             steps {
-                echo 'Build and testing stages completed successfully!'
+                echo 'Build, testing and Docker deployment completed successfully!'
             }
         }
     }
 
     post {
         success {
-            echo 'CI Pipeline completed successfully!'
+            echo 'CI/CD Pipeline completed successfully!'
         }
 
         failure {
-            echo 'CI Pipeline failed!'
+            echo 'CI/CD Pipeline failed!'
         }
     }
 }
+```
